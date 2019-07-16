@@ -1,0 +1,64 @@
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id='app'>
+  <h2>Tasks</h2>
+  <ul>
+    <li v-for="task in taskObjects">
+      <div >
+        <!-- Loop through task, display if completed, add delete -->
+        <label><input v-model="task.complete" type="checkbox" >
+        </label>
+        <p>{{ task.description }}</p>
+        <button v-on:click="task.delete(task.index)">Delete</button>
+      </div>
+    </li>
+  </ul>
+  <h2>Create new task</h2>
+
+  <div style="display: inline">
+    <p>Task description: </p>
+    <input v-model="taskDescription" type="text">
+  </div>
+
+  <button type="submit" v-on:click="submit()">Submit</button>
+</div>
+
+
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      taskObjects: [],
+      taskDescription: "",
+      index: 0,
+    },
+    methods: {
+      submit: function () {
+        let taskObject = {
+          description: this.taskDescription,
+          complete: false,
+          index: this.index,
+          deleted: false,
+          delete: (index) => {
+            let arrayIndex;
+            for(let i = 0; i < this.taskObjects.length; i++){
+              if(this.taskObjects[i].index === index){
+                arrayIndex = i;
+              }
+            }
+
+            this.taskObjects.splice(arrayIndex, 1);
+          }
+        }
+        this.taskObjects.push(taskObject);
+        this.taskDescription = "";
+        this.index++;
+      },
+
+    }
+  });
+
+</script>
+
+</html>
